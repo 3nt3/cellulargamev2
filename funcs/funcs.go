@@ -71,3 +71,8 @@ func ChangeSize (id int, size int) Cell {
 	Cells[id].Size = size
 	return Cells[id]
 }
+
+func Delall () {
+	Cells = []Cell{}
+	FoodItems = []Food{}
+}
