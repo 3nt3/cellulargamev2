@@ -14,6 +14,8 @@ func SpawnFood() []Food {
 	valuesSrc := []int{5, 10, 20}
 	rarities := []int{5, 4, 1}
 
+	FoodItems = []Food{}
+
 	var values []int
 	for i := 0; i < 10; i++ {
 		if len(values) < rarities[0] {
