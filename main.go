@@ -72,7 +72,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			funcs.Delall()
 
 		case "eat":
+			var data map[string]int
+			_ = json.Unmarshal(creq.Data, data)
+			id := data["id"]
+			mealId := data["mealId"]
 
+			cresp.Data, _ = json.Marshal(funcs.Eat(id, mealId))
 		}
 		_ = conn.WriteJSON(cresp)
 	}
