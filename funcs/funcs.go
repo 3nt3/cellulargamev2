@@ -76,3 +76,9 @@ func Delall () {
 	Cells = []Cell{}
 	FoodItems = []Food{}
 }
+
+func Eat(id int, mealId int) []Cell {
+	Cells[mealId].Alive = false
+	Cells[id].Meals = append(Cells[id].Meals, Cells[mealId])
+	return Cells
+}

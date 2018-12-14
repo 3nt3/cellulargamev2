@@ -67,8 +67,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			id := data["id"]
 			size := data["size"]
 			cresp.Data, _ = json.Marshal(funcs.ChangeSize(id, size))
+
+		case "delall":
+			funcs.Delall()
+
+		case "eat":
+
 		}
-		C
 		_ = conn.WriteJSON(cresp)
 	}
 }
