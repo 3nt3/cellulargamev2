@@ -58,13 +58,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		case "initCell":
 			var data map[string]string
-			_ = json.Unmarshal([]byte(creq.Data), data)
+			_ = json.Unmarshal([]byte(creq.Data), &data)
+			log.Println(data)
 			name := data["name"]
+			//log.Println(reflect.TypeOf(data))
 			cresp.Data, _ = json.Marshal(funcs.InitCell(name))
 
 		case "updateSize":
 			var data map[string]int
-			_ = json.Unmarshal([]byte(creq.Data), data)
+			_ = json.Unmarshal([]byte(creq.Data), &data)
 			id := data["id"]
 			size := data["size"]
 			cresp.Data, _ = json.Marshal(funcs.ChangeSize(id, size))
@@ -74,7 +76,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		case "eat":
 			var data map[string]int
-			_ = json.Unmarshal([]byte(creq.Data), data)
+			_ = json.Unmarshal([]byte(creq.Data), &data)
 			id := data["id"]
 			mealId := data["mealId"]
 
