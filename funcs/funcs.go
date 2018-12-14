@@ -47,3 +47,27 @@ func SpawnFood() []Food {
 	return FoodItems
 }
 
+func GetFood() []Food {
+	return FoodItems
+}
+
+func InitCell(name string) Cell {
+	var NewCell Cell
+	var pos []int
+
+	for i := 0; i < 2; i++ {
+		s := rand.NewSource(time.Now().UnixNano())
+		r := rand.New(s)
+		pos = append(pos, r.Intn(2000)-1000)
+	}
+	NewCell = Cell{len(Cells), name, true, 10, 0, []Cell{}, pos}
+	Cells = append(Cells, NewCell)
+	log.Printf("New Cell: %v", NewCell)
+
+	return NewCell
+}
+
+func ChangeSize (id int, size int) Cell {
+	Cells[id].Size = size
+	return Cells[id]
+}

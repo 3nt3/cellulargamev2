@@ -1,4 +1,4 @@
-package main
+package funcs
 
 type Cell struct {
 	Id   int
@@ -8,7 +8,7 @@ type Cell struct {
 
 	Size  int
 	Kills int
-	Meals []cell
+	Meals []Cell
 
 	Pos []int
 }
