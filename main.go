@@ -11,8 +11,9 @@ import (
 // idk ... structs i think
 type ClientRequest struct {
 	Type string `json:"type"`// [spawnFood, getFood, initCell, updateSize, (delall), eat, getCells]
-	Data []byte `json:"data"`
+	Data string `json:"data"`
 }
+
 type ClientResponse struct {
 	Data []byte
 }
@@ -57,13 +58,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		case "initCell":
 			var data map[string]string
-			_ = json.Unmarshal(creq.Data, data)
+			_ = json.Unmarshal([]byte(creq.Data), data)
 			name := data["name"]
 			cresp.Data, _ = json.Marshal(funcs.InitCell(name))
 
 		case "updateSize":
 			var data map[string]int
-			_ = json.Unmarshal(creq.Data, data)
+			_ = json.Unmarshal([]byte(creq.Data), data)
 			id := data["id"]
 			size := data["size"]
 			cresp.Data, _ = json.Marshal(funcs.ChangeSize(id, size))
@@ -73,11 +74,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		case "eat":
 			var data map[string]int
-			_ = json.Unmarshal(creq.Data, data)
+			_ = json.Unmarshal([]byte(creq.Data), data)
 			id := data["id"]
 			mealId := data["mealId"]
 
 			cresp.Data, _ = json.Marshal(funcs.Eat(id, mealId))
+
+		case "getCells":
+			cresp.Data, _ = json.Marshal(funcs.GetCells())
 		}
 		_ = conn.WriteJSON(cresp)
 	}

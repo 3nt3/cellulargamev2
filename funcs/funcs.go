@@ -82,3 +82,7 @@ func Eat(id int, mealId int) []Cell {
 	Cells[id].Meals = append(Cells[id].Meals, Cells[mealId])
 	return Cells
 }
+
+func GetCells() []Cell {
+	return Cells
+}
