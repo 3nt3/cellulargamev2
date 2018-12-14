@@ -67,19 +67,21 @@ func InitCell(name string) Cell {
 	return NewCell
 }
 
-func ChangeSize (id int, size int) Cell {
+func ChangeSize(id int, size int) Cell {
 	Cells[id].Size = size
 	return Cells[id]
 }
 
-func Delall () {
+func Delall() {
 	Cells = []Cell{}
 	FoodItems = []Food{}
 }
 
 func Eat(id int, mealId int) []Cell {
+	//log.Println(id, mealId)
 	Cells[mealId].Alive = false
 	Cells[id].Meals = append(Cells[id].Meals, Cells[mealId])
+	Cells[id].Kills += 1
 	return Cells
 }
 
