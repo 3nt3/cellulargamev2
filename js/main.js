@@ -1,7 +1,7 @@
 var ws = new WebSocket("ws://localhost:8000/");
 
 ws.onmessage = function() {
-	console.log(JSON.parse(event.data).type);
+	console.log(JSON.parse(atob(JSON.parse(event.data).data)));
 }
 
 function spawnFood() {
@@ -24,6 +24,10 @@ function eat(id, mealId) {
 	ws.send(JSON.stringify({type: "eat", data: JSON.stringify({id: id, mealId: mealId})}));
 }
 
-function changeSize(id, size) {
-	ws.send(JSON.stringify({type: "changeSize", data: JSON.stringify({id: id, size: size})}));
+function updtaeSize(id, size) {
+	ws.send(JSON.stringify({type: "updateSize", data: JSON.stringify({id: id, size: size})}));
+}
+
+function changePos(id, pos) {
+	ws.send(JSON.stringify({type: "changePos", data: JSON.stringify({id: id, posX: pos[0], posY: pos[1]})}));
 }
