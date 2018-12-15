@@ -1,9 +1,29 @@
 var ws = new WebSocket("ws://localhost:8000/");
 
 ws.onmessage = function() {
-	console.log(event.data);
+	console.log(JSON.parse(atob(JSON.parse(event.data).data)));
 }
 
 function spawnFood() {
 	ws.send(JSON.stringify({type: "spawnFood"}))
+}
+
+function getFood() {
+	ws.send(JSON.stringify({type: "getFood"}))
+}
+
+function initCell(name) {
+	ws.send(JSON.stringify({type: "initCell", data: JSON.stringify({name: name})}))
+}
+
+function getCells() {
+	ws.send(JSON.stringify({type: "getCells"}))
+}
+
+function eat(id, mealId) {
+	ws.send(JSON.stringify({type: "eat", data: JSON.stringify({id: id, mealId: mealId})}));
+}
+
+function changeSize(id, size) {
+	ws.send(JSON.stringify({type: "changeSize", data: JSON.stringify({id: id, size: size})}));
 }
