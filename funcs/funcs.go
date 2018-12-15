@@ -90,3 +90,8 @@ func Eat(id int, mealId int) []Cell {
 func GetCells() []Cell {
 	return Cells
 }
+
+func ChangePos(id int, pos []int) Cell {
+	Cells[id].Pos = pos
+	return Cells[id]
+}

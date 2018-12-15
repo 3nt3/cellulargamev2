@@ -85,6 +85,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		case "getCells":
 			cresp.Data, _ = json.Marshal(funcs.GetCells())
+
+		case "changePos":
+			var data map[string]int
+			_ = json.Unmarshal([]byte(creq.Data), &data)
+			id := data["id"]
+			posX := data["posX"]
+			posY := data["posY"]
+
+			cresp.Data, _ = json.Marshal(funcs.ChangePos(id, []int{posX, posY}))
 		}
 		cresp.Type = creq.Type
 		_ = conn.WriteJSON(cresp)
