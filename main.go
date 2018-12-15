@@ -15,7 +15,8 @@ type ClientRequest struct {
 }
 
 type ClientResponse struct {
-	Data []byte
+	Type string `json:"type"`
+	Data []byte `json:"data"`
 }
 
 // vars
@@ -85,6 +86,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		case "getCells":
 			cresp.Data, _ = json.Marshal(funcs.GetCells())
 		}
+		cresp.Type = creq.Type
 		_ = conn.WriteJSON(cresp)
 	}
 }
