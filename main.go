@@ -16,7 +16,7 @@ type ClientRequest struct {
 
 type ClientResponse struct {
 	Type string `json:"type"`
-	Data []byte `json:"data"`
+	Data string `json:"data"`
 }
 
 // vars
@@ -42,20 +42,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		creq := &ClientRequest{}
-		err := conn.ReadJSON(creq)
-		if err != nil {
-			log.Print(err)
-			return
-		}
+		_ = conn.ReadJSON(creq)
 		log.Printf("Message from client: %v", creq)
 
 		cresp := &ClientResponse{}
 		switch creq.Type {
 		case "spawnFood":
-			cresp.Data, _ = json.Marshal(funcs.SpawnFood())
+			data, _ := json.Marshal(funcs.SpawnFood())
+			cresp.Data = string(data)
 
 		case "getFood":
-			cresp.Data, _ = json.Marshal(funcs.GetFood())
+			data, _ := json.Marshal(funcs.GetFood())
+			cresp.Data = string(data)
 
 		case "initCell":
 			var data map[string]string
@@ -63,14 +61,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			log.Println(data)
 			name := data["name"]
 			//log.Println(reflect.TypeOf(data))
-			cresp.Data, _ = json.Marshal(funcs.InitCell(name))
+			jsonData, _ := json.Marshal(funcs.InitCell(name))
+			cresp.Data = string(jsonData)
 
 		case "updateSize":
 			var data map[string]int
 			_ = json.Unmarshal([]byte(creq.Data), &data)
 			id := data["id"]
 			size := data["size"]
-			cresp.Data, _ = json.Marshal(funcs.ChangeSize(id, size))
+
+			jsonData, _ := json.Marshal(funcs.ChangeSize(id, size))
+			cresp.Data = string(jsonData)
 
 		case "delall":
 			funcs.Delall()
@@ -81,12 +82,17 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			id := data["id"]
 			mealId := data["mealId"]
 
-			cresp.Data, _ = json.Marshal(funcs.Eat(id, mealId))
+			jsonData, _ := json.Marshal(funcs.Eat(id, mealId))
+			cresp.Data = string(jsonData)
 
-		case "getCells":
-			cresp.Data, _ = json.Marshal(funcs.GetCells())
+		default:
+			data, _ := json.Marshal(funcs.GetCells())
+			cresp.Data = string(data)
+			cresp.Type = "status"
+			_ = conn.WriteJSON(cresp)
+			continue
 		}
+		conn.WriteJSON(cresp)
 		cresp.Type = creq.Type
-		_ = conn.WriteJSON(cresp)
 	}
 }
