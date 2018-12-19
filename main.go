@@ -10,7 +10,7 @@ import (
 
 // idk ... structs i think
 type ClientRequest struct {
-	Type string `json:"type"`// [spawnFood, getFood, initCell, updateSize, (delall), eat, getCells]
+	Type string `json:"type"` // [spawnFood, getFood, initCell, updateSize, (delall), eat, getCells]
 	Data string `json:"data"`
 }
 
@@ -25,8 +25,6 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-
-
 
 func main() {
 	http.HandleFunc("/", handler)
@@ -43,7 +41,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	for {
 		creq := &ClientRequest{}
 		_ = conn.ReadJSON(creq)
-		log.Printf("Message from client: %v", creq)
+		//log.Printf("Message from client: %v", creq)
 
 		cresp := &ClientResponse{}
 		switch creq.Type {
@@ -60,7 +58,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			_ = json.Unmarshal([]byte(creq.Data), &data)
 			log.Println(data)
 			name := data["name"]
-			//log.Println(reflect.TypeOf(data))
+			//log.Println(reflect.TypeOf(data)
 			jsonData, _ := json.Marshal(funcs.InitCell(name))
 			cresp.Data = string(jsonData)
 
@@ -84,15 +82,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 			jsonData, _ := json.Marshal(funcs.Eat(id, mealId))
 			cresp.Data = string(jsonData)
-
-		default:
-			data, _ := json.Marshal(funcs.GetCells())
-			cresp.Data = string(data)
-			cresp.Type = "status"
-			_ = conn.WriteJSON(cresp)
-			continue
 		}
-		conn.WriteJSON(cresp)
 		cresp.Type = creq.Type
+		conn.WriteJSON(cresp)
 	}
 }
